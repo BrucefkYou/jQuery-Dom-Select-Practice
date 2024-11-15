@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			body {
+				display: flex;
+				justify-content: center;
+			}
+			.container {
+				width: 600px;
+			}
+			.row {
+				display: flex;
+				padding: 10px;
+				background-color: #c6c5c5;
+				border-radius: 10px;
+				margin-bottom: 10px;
+				font-size: 20px;
+			}
+			.row2 {
+				position: relative;
+			}
+
+			label {
+				min-width: 50px;
+				padding-left: 5px;
+				padding-right: 20px;
+			}
+			input[type="text"],
+			select {
+				width: 100%;
+				border: none;
+			}
+			select {
+				font-size: 20px;
+			}
+			textarea {
+				width: 100%;
+				height: 50px;
+				border: none;
+			}
+			.row1 {
+				display: flex;
+				justify-content: flex-end;
+			}
+			button {
+				margin-right: 10px;
+			}
+			.active {
+				background-color: #f6b46d;
+			}
+			.empty {
+				background-color: pink;
+				color: #000000;
+			}
+			/* css */
+			.clickImg {
+				position: absolute;
+				right: 0;
+				width: 20px;
+				transform: rotate(-90deg);
+				transition: transform 1s;
+				transform-origin: center bottom;
+			}
+			.xMark {
+				transform: rotate(0deg);
+			}
+			.xMarkClose {
+				transform: rotate(-90deg);
+			}
+			.unactive {
+				display: none;
+			}
+		</style>
+		<title></title>
+	</head>
+	<body>
+		<div class="container">
+			<form>
+				<div class="row row1">
+					<button type="submit">送出按鈕</button>
+					<input type="submit" value="送出input" />
+				</div>
+				<div class="row row2">
+					<label for="inpu1" name="input1">inpu1</label>
+					<input id="inpu1" type="text" />
+					<img class="clickImg unactive" src="./x mark.png" alt="" />
+				</div>
+			</form>
+		</div>
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"
+		></script>
+		<script>
+			$("[type=submit]").on("click", (e) => {
+				e.preventDefault();
+				let submitCheck = true;
+				$("input[type=text]").closest(".row").removeClass("empty");
+				// $("img").removeClass("xMark");
+
+				if ($("input[type=text]").val() === "") {
+					$("input[type=text]").closest(".row").addClass("empty");
+					$("img").removeClass("unactive");
+					setTimeout(() => {
+						$("img").addClass("xMark");
+					}, 30);
+					submitCheck = false;
+				}
+				if ($("input[type=text]").val() !== "") {
+					$("img").removeClass("xMark");
+					$("img").addClass("xMarkClose");
+					setTimeout(() => {
+						$("img").addClass("unactive");
+						$("img").removeClass("xMarkClose");
+					}, 600);
+				}
+
+				if (submitCheck === true) {
+					// $(e.currentTarget).closest("form").submit();
+				}
+			});
+		</script>
+	</body>
+</html>

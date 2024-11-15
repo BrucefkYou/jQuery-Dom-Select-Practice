@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            --blockWidth: 100px;
+            --blockHeight: 100px; 
+        }
+        .container{
+            margin: auto;
+        }
+        .row{
+            display: flex;
+            justify-content:space-around;
+        }
+        .col{
+            position: relative;
+            margin-inline: auto;
+            /* background-color: rgb(147, 147, 147); */
+            height: 350px;
+            width: 350px;
+        }
+        .block{
+            width: var(--blockWidth);
+            height: var(--blockWidth);
+            background-color: orange;
+            position: absolute;
+            text-align: center;
+            line-height: var(--blockHeight);
+            font-size: 40px;
+        }
+        
+        .block1{
+            left: calc(50% - var(--blockWidth)/2);
+            border-radius: 30% 30% 0 0;
+        }
+        .block2{
+            right: 0;
+            top: calc(50% - var(--blockWidth)/2);
+            border-radius: 0 30% 30% 0;
+        }
+        .block3{
+            bottom: 0;
+            right: calc(50% - var(--blockWidth)/2);
+            border-radius: 0 0 30% 30%;
+        }
+        .block4{
+            top: calc(50% - var(--blockHeight)/2);
+            border-radius: 30% 0 0 30%;
+        }
+        .active{
+            background: red;
+        }
+    </style>
+    <title>H.W-02</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col col1">
+                <div class="block block1">1</div>
+                <div class="block block2">2</div>
+                <div class="block block3">3</div>
+                <div class="block block4">4</div>
+            </div>
+            <div class="col col2">
+                <div class="block block1">1</div>
+                <div class="block block2">2</div>
+                <div class="block block3">3</div>
+                <div class="block block4">4</div>
+            </div>
+            <div class="col col3">
+                <div class="block block1">1</div>
+                <div class="block block2">2</div>
+                <div class="block block3">3</div>
+                <div class="block block4">4</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+
+        let currentBlock = document.querySelector(".col1 .block1");
+        currentBlock.classList.add("active");
+
+        window.addEventListener("keyup", function(e) {
+            currentBlock.classList.remove("active");
+
+            if (e.key === "ArrowRight") {
+                let nextBlock = currentBlock.nextElementSibling;
+                if (!nextBlock || !nextBlock.classList.contains("block")) {
+                    let nextCol = currentBlock.closest(".col").nextElementSibling;
+                    if (!nextCol) nextCol = document.querySelector(".col1");
+                    nextBlock = nextCol.querySelector(".block1");
+                }
+                currentBlock = nextBlock;
+            }
+
+            if (e.key === "ArrowLeft") {
+                let prevBlock = currentBlock.previousElementSibling;
+                if (!prevBlock || !prevBlock.classList.contains("block")) {
+                    let prevCol = currentBlock.closest(".col").previousElementSibling;
+                    if (!prevCol) prevCol = document.querySelector(".col3"); 
+                    prevBlock = prevCol.querySelector(".block4");
+                }
+                currentBlock = prevBlock;
+            }
+
+            currentBlock.classList.add("active");
+        });
+    </script>
+</body>
+</html>

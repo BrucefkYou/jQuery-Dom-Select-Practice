@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        --blockWidth: 100px;
+        --blockHeight: 100px;
+      }
+      .container {
+        margin: auto;
+      }
+      .row {
+        display: flex;
+        justify-content: space-around;
+      }
+      .col {
+        position: relative;
+        margin-inline: auto;
+        /* background-color: rgb(147, 147, 147); */
+        height: 350px;
+        width: 350px;
+      }
+      .block {
+        width: var(--blockWidth);
+        height: var(--blockWidth);
+        background-color: orange;
+        position: absolute;
+        text-align: center;
+        line-height: var(--blockHeight);
+        font-size: 40px;
+      }
+      .block0 {
+        display: none;
+      }
+      .block1 {
+        left: calc(50% - var(--blockWidth) / 2);
+        border-radius: 30% 30% 0 0;
+      }
+      .block2 {
+        right: 0;
+        top: calc(50% - var(--blockWidth) / 2);
+        border-radius: 0 30% 30% 0;
+      }
+      .block3 {
+        bottom: 0;
+        right: calc(50% - var(--blockWidth) / 2);
+        border-radius: 0 0 30% 30%;
+      }
+      .block4 {
+        top: calc(50% - var(--blockHeight) / 2);
+        border-radius: 30% 0 0 30%;
+      }
+      .active {
+        background: red;
+      }
+    </style>
+    <title>H.W2-4jQ</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col col1">
+          <div class="block block1">1</div>
+          <div class="block block2">2</div>
+          <div class="block block3">3</div>
+          <div class="block block4">4</div>
+        </div>
+        <div class="col col2">
+          <div class="block block1">1</div>
+          <div class="block block2">2</div>
+          <div class="block block3">3</div>
+          <div class="block block4">4</div>
+        </div>
+        <div class="col col3">
+          <div class="block block1">1</div>
+          <div class="block block2">2</div>
+          <div class="block block3">3</div>
+          <div class="block block4">4</div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let currentBlock = null;
+
+      $(window).on("keyup", function (e) {
+        if (currentBlock !== null) {
+          currentBlock.removeClass("active"); 
+        }
+
+        // 右鍵
+        if (e.which === 39) {
+
+          if (currentBlock === null) { // 判定是不是從頭開始
+            currentBlock = $(".col1").find(".block").first();
+          } else if (currentBlock.hasClass("block")) { // 椅子循環
+            let nextBlock = currentBlock.next(".block"); // 找下一個椅子
+            if (nextBlock.length === 0) { // 椅子到底的話找最近的桌子
+              currentBlock = currentBlock.closest(".col");
+            } else {
+              currentBlock = nextBlock;
+            }
+          } else if (currentBlock.hasClass("col")) { // 如果現在選的是桌子，則進入椅子
+            let nextCol = currentBlock.next(".col");
+            if (nextCol.length === 0) nextCol = $(".col").first(); // 回到第一張桌子
+            currentBlock = nextCol.find(".block").first();
+          }
+        }
+
+        // 左鍵
+        if (e.which === 37) {
+          
+          if (currentBlock.hasClass("col")) { // 如果在桌子
+            let lastBlock = currentBlock.find(".block").last();  // 找上一張桌子的最後一張椅子
+            currentBlock = lastBlock;
+          } else {
+            let prevBlock = currentBlock.prev(".block"); // 找上一張椅子
+            if (prevBlock.length === 0) {  // 如果沒椅子
+              let prevCol = currentBlock.closest(".col").prev(".col"); // 找上一張桌子
+              if (prevCol.length === 0) prevCol = $(".col").last(); // 如果沒有上一張桌子的話找最後一張桌子
+              currentBlock = prevCol;
+            } else {
+              currentBlock = prevBlock;
+            }
+          }
+        }
+
+        currentBlock.addClass("active");
+      });
+    </script>
+  </body>
+</html>

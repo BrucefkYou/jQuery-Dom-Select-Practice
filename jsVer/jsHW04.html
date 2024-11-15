@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        --blockWidth: 100px;
+        --blockHeight: 100px;
+      }
+      .container {
+        margin: auto;
+      }
+      .row {
+        display: flex;
+        justify-content: space-around;
+      }
+      .col {
+        position: relative;
+        margin-inline: auto;
+        height: 350px;
+        width: 350px;
+      }
+      .block {
+        width: var(--blockWidth);
+        height: var(--blockWidth);
+        background-color: orange;
+        position: absolute;
+        text-align: center;
+        line-height: var(--blockHeight);
+        font-size: 40px;
+      }
+      .block0 {
+        display: none;
+      }
+      .block1 {
+        left: calc(50% - var(--blockWidth) / 2);
+        border-radius: 30% 30% 0 0;
+      }
+      .block2 {
+        right: 0;
+        top: calc(50% - var(--blockWidth) / 2);
+        border-radius: 0 30% 30% 0;
+      }
+      .block3 {
+        bottom: 0;
+        right: calc(50% - var(--blockWidth) / 2);
+        border-radius: 0 0 30% 30%;
+      }
+      .block4 {
+        top: calc(50% - var(--blockHeight) / 2);
+        border-radius: 30% 0 0 30%;
+      }
+      .active {
+        background: red;
+      }
+    </style>
+    <title>H.W2-4Js</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col col1">
+          <div class="block block1">1</div>
+          <div class="block block2">2</div>
+          <div class="block block3">3</div>
+          <div class="block block4">4</div>
+        </div>
+        <div class="col col2">
+          <div class="block block1">1</div>
+          <div class="block block2">2</div>
+          <div class="block block3">3</div>
+          <div class="block block4">4</div>
+        </div>
+        <div class="col col3">
+          <div class="block block1">1</div>
+          <div class="block block2">2</div>
+          <div class="block block3">3</div>
+          <div class="block block4">4</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentBlock = null;
+  
+      window.addEventListener("keyup", function (e) {
+          if (currentBlock !== null) {
+              currentBlock.classList.remove("active");
+          }
+  
+          // 右鍵
+          if (e.key === "ArrowRight") {
+              if (currentBlock === null) {
+                  currentBlock = document.querySelector(".col1 .block");
+              } else if (currentBlock.classList.contains("block")) {
+                  let nextBlock = currentBlock.nextElementSibling;
+                  if (!nextBlock || !nextBlock.classList.contains("block")) {
+                      currentBlock = currentBlock.closest(".col");
+                  } else {
+                      currentBlock = nextBlock;
+                  }
+              } else if (currentBlock.classList.contains("col")) {
+                  let nextCol = currentBlock.nextElementSibling;
+                  if (!nextCol || !nextCol.classList.contains("col")) {
+                      nextCol = document.querySelector(".col");
+                  }
+                  currentBlock = nextCol.querySelector(".block");
+              }
+          }
+  
+          // 左鍵
+          if (e.key === "ArrowLeft") {
+              if (currentBlock.classList.contains("col")) {
+                  let lastBlock = currentBlock.querySelector(".block:last-child");
+                  currentBlock = lastBlock;
+              } else {
+                  let prevBlock = currentBlock.previousElementSibling;
+                  if (!prevBlock || !prevBlock.classList.contains("block")) {
+                      let prevCol = currentBlock.closest(".col").previousElementSibling;
+                      if (!prevCol || !prevCol.classList.contains("col")) {
+                          prevCol = document.querySelectorAll(".col")[document.querySelectorAll(".col").length - 1];
+                      }
+                      currentBlock = prevCol;
+                  } else {
+                      currentBlock = prevBlock;
+                  }
+              }
+          }
+  
+          currentBlock.classList.add("active");
+      });
+  </script>
+  </body>
+</html>

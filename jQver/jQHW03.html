@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			body {
+				--blockWidth: 100px;
+				--blockHeight: 100px;
+			}
+			.container {
+				margin: auto;
+			}
+			.row {
+				display: flex;
+				justify-content: space-around;
+			}
+			.col {
+				position: relative;
+				margin-inline: auto;
+				/* background-color: rgb(147, 147, 147); */
+				height: 350px;
+				width: 350px;
+			}
+			.block {
+				width: var(--blockWidth);
+				height: var(--blockWidth);
+				background-color: orange;
+				position: absolute;
+				text-align: center;
+				line-height: var(--blockHeight);
+				font-size: 40px;
+			}
+			.block0 {
+				display: none;
+			}
+			.block1 {
+				left: calc(50% - var(--blockWidth) / 2);
+				border-radius: 30% 30% 0 0;
+			}
+			.block2 {
+				right: 0;
+				top: calc(50% - var(--blockWidth) / 2);
+				border-radius: 0 30% 30% 0;
+			}
+			.block3 {
+				bottom: 0;
+				right: calc(50% - var(--blockWidth) / 2);
+				border-radius: 0 0 30% 30%;
+			}
+			.block4 {
+				top: calc(50% - var(--blockHeight) / 2);
+				border-radius: 30% 0 0 30%;
+			}
+			.active {
+				background: red;
+			}
+		</style>
+		<title>H.W-02</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col col1">
+					<div class="block block1">1</div>
+					<div class="block block2">2</div>
+					<div class="block block3">3</div>
+					<div class="block block4">4</div>
+				</div>
+				<div class="col col2">
+					<div class="block block1">1</div>
+					<div class="block block2">2</div>
+					<div class="block block3">3</div>
+					<div class="block block4">4</div>
+				</div>
+				<div class="col col3">
+					<div class="block block1">1</div>
+					<div class="block block2">2</div>
+					<div class="block block3">3</div>
+					<div class="block block4">4</div>
+				</div>
+			</div>
+		</div>
+
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"
+		></script>
+		<script>
+			let currentBlock = null;
+
+			$(window).on("keyup", function (e) {
+				if (currentBlock !== null) {
+					currentBlock.removeClass("active");
+				}
+
+				// 右鍵
+				if (e.which === 39) {
+					if (currentBlock === null) {
+						currentBlock = $(".col1");
+					} else if (currentBlock.hasClass("col")) {
+						let firstBlock = currentBlock.find(".block").first();
+						currentBlock = firstBlock;
+					} else {
+						let nextBlock = currentBlock.next(".block");
+						if (nextBlock.length === 0) {
+							let nextCol = currentBlock.closest(".col").next(".col");
+							if (nextCol.length === 0)
+								nextCol = $(".col").first();
+							currentBlock = nextCol;
+						} else {
+							currentBlock = nextBlock;
+						}
+					}
+				}
+
+				// 左鍵
+				if (e.which === 37) {
+					if (currentBlock === null) {
+						currentBlock = $(".col3");
+					} else if (currentBlock.hasClass("block")) {
+						let prevBlock = currentBlock.prev(".block");
+						if (prevBlock.length === 0) {
+							currentBlock = currentBlock.closest(".col");
+						} else {
+							currentBlock = prevBlock;
+						}
+					} else if (currentBlock.hasClass("col")) {
+						let prevCol = currentBlock.prev(".col");
+						if (prevCol.length === 0) prevCol = $(".col").last();
+						currentBlock = prevCol.find(".block").last();
+					}
+				}
+
+				currentBlock.addClass("active");
+			});
+		</script>
+	</body>
+</html>
